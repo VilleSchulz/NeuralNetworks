@@ -1,0 +1,96 @@
+<html>
+<head>
+<title>Iris.ipynb</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+.ls0 { height: 1px; border-width: 0; color: #43454a; background-color:#43454a}
+.ln { color: #4b5059; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Iris.ipynb</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">#%% 
+<a name="l2"><span class="ln">2    </span></a></span><span class="s1">import </span><span class="s0">keras</span>
+<a name="l3"><span class="ln">3    </span></a><span class="s1">import </span><span class="s0">pandas </span><span class="s1">as </span><span class="s0">pd</span>
+<a name="l4"><span class="ln">4    </span></a><span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">model_selection </span><span class="s1">import </span><span class="s0">train_test_split</span>
+<a name="l5"><span class="ln">5    </span></a><span class="s1">from </span><span class="s0">sklearn</span><span class="s2">.</span><span class="s0">preprocessing </span><span class="s1">import </span><span class="s0">LabelEncoder</span><span class="s2">, </span><span class="s0">StandardScaler</span>
+<a name="l6"><span class="ln">6    </span></a><span class="s1">import </span><span class="s0">matplotlib</span><span class="s2">.</span><span class="s0">pyplot </span><span class="s1">as </span><span class="s0">plt</span><hr class="ls0"><a name="l7"><span class="ln">7    </span></a><span class="s0">#%% 
+<a name="l8"><span class="ln">8    </span></a>url </span><span class="s2">= </span><span class="s3">&quot;https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data&quot;</span>
+<a name="l9"><span class="ln">9    </span></a><span class="s0">columns </span><span class="s2">= [</span><span class="s3">'sepal_length'</span><span class="s2">, </span><span class="s3">'sepal_width'</span><span class="s2">, </span><span class="s3">'petal_length'</span><span class="s2">, </span><span class="s3">'petal_width'</span><span class="s2">, </span><span class="s3">'species'</span><span class="s2">]</span>
+<a name="l10"><span class="ln">10   </span></a><span class="s0">df </span><span class="s2">= </span><span class="s0">pd</span><span class="s2">.</span><span class="s0">read_csv</span><span class="s2">(</span><span class="s0">url</span><span class="s2">, </span><span class="s0">header</span><span class="s2">=</span><span class="s1">None</span><span class="s2">, </span><span class="s0">names</span><span class="s2">=</span><span class="s0">columns</span><span class="s2">)</span>
+<a name="l11"><span class="ln">11   </span></a><span class="s0">df </span><span class="s2">= </span><span class="s0">df</span><span class="s2">.</span><span class="s0">dropna</span><span class="s2">()</span>
+<a name="l12"><span class="ln">12   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s0">df</span><span class="s2">.</span><span class="s0">head</span><span class="s2">())</span><hr class="ls0"><a name="l13"><span class="ln">13   </span></a><span class="s0">#%% 
+<a name="l14"><span class="ln">14   </span></a></span><span class="s4"># Split target and values</span>
+<a name="l15"><span class="ln">15   </span></a><span class="s0">X </span><span class="s2">= </span><span class="s0">df</span><span class="s2">.</span><span class="s0">iloc</span><span class="s2">[:, </span><span class="s5">0</span><span class="s2">:</span><span class="s5">4</span><span class="s2">].</span><span class="s0">values</span>
+<a name="l16"><span class="ln">16   </span></a><span class="s0">y </span><span class="s2">= </span><span class="s0">df</span><span class="s2">[</span><span class="s3">'species'</span><span class="s2">].</span><span class="s0">values</span><hr class="ls0"><a name="l17"><span class="ln">17   </span></a><span class="s0">#%% 
+<a name="l18"><span class="ln">18   </span></a></span><span class="s4"># change labels to numerical values</span>
+<a name="l19"><span class="ln">19   </span></a><span class="s0">encoder </span><span class="s2">= </span><span class="s0">LabelEncoder</span><span class="s2">()</span>
+<a name="l20"><span class="ln">20   </span></a><span class="s0">y_encoded </span><span class="s2">= </span><span class="s0">encoder</span><span class="s2">.</span><span class="s0">fit_transform</span><span class="s2">(</span><span class="s0">y</span><span class="s2">)</span>
+<a name="l21"><span class="ln">21   </span></a>
+<a name="l22"><span class="ln">22   </span></a><span class="s4"># make vector from categories</span>
+<a name="l23"><span class="ln">23   </span></a><span class="s0">y_categorical </span><span class="s2">= </span><span class="s0">keras</span><span class="s2">.</span><span class="s0">utils</span><span class="s2">.</span><span class="s0">to_categorical</span><span class="s2">(</span><span class="s0">y_encoded</span><span class="s2">)</span>
+<a name="l24"><span class="ln">24   </span></a>
+<a name="l25"><span class="ln">25   </span></a><span class="s4"># scale values</span>
+<a name="l26"><span class="ln">26   </span></a><span class="s0">scaler </span><span class="s2">= </span><span class="s0">StandardScaler</span><span class="s2">()</span>
+<a name="l27"><span class="ln">27   </span></a><span class="s0">X_scaled </span><span class="s2">= </span><span class="s0">scaler</span><span class="s2">.</span><span class="s0">fit_transform</span><span class="s2">(</span><span class="s0">X</span><span class="s2">)</span>
+<a name="l28"><span class="ln">28   </span></a>
+<a name="l29"><span class="ln">29   </span></a><span class="s4"># split data set and ensure that test and train set have same amount of targets and also suffle data.</span>
+<a name="l30"><span class="ln">30   </span></a><span class="s0">X_train</span><span class="s2">, </span><span class="s0">X_test</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">, </span><span class="s0">y_test </span><span class="s2">= </span><span class="s0">train_test_split</span><span class="s2">(</span><span class="s0">X_scaled</span><span class="s2">, </span><span class="s0">y_categorical</span><span class="s2">, </span><span class="s0">test_size</span><span class="s2">=</span><span class="s5">0.2</span><span class="s2">, </span><span class="s0">random_state</span><span class="s2">=</span><span class="s5">42</span><span class="s2">,</span>
+<a name="l31"><span class="ln">31   </span></a>                                                    <span class="s0">shuffle</span><span class="s2">=</span><span class="s1">True</span><span class="s2">, </span><span class="s0">stratify</span><span class="s2">=</span><span class="s0">y</span><span class="s2">)</span>
+<a name="l32"><span class="ln">32   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Training data shape:&quot;</span><span class="s2">, </span><span class="s0">X_train</span><span class="s2">.</span><span class="s0">shape</span><span class="s2">)</span>
+<a name="l33"><span class="ln">33   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Test data shape:&quot;</span><span class="s2">, </span><span class="s0">X_test</span><span class="s2">.</span><span class="s0">shape</span><span class="s2">)</span>
+<a name="l34"><span class="ln">34   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Training labels shape:&quot;</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">.</span><span class="s0">shape</span><span class="s2">)</span>
+<a name="l35"><span class="ln">35   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Test labels shape:&quot;</span><span class="s2">, </span><span class="s0">y_test</span><span class="s2">.</span><span class="s0">shape</span><span class="s2">)</span><hr class="ls0"><a name="l36"><span class="ln">36   </span></a><span class="s0">#%% md 
+<a name="l37"><span class="ln">37   </span></a># Building the neural network 
+<a name="l38"><span class="ln">38   </span></a> <hr class="ls0"><a name="l39"><span class="ln">39   </span></a>#%% 
+<a name="l40"><span class="ln">40   </span></a>model </span><span class="s2">= </span><span class="s0">keras</span><span class="s2">.</span><span class="s0">Sequential</span><span class="s2">([</span>
+<a name="l41"><span class="ln">41   </span></a>    <span class="s0">keras</span><span class="s2">.</span><span class="s0">Input</span><span class="s2">(</span><span class="s0">shape</span><span class="s2">=(</span><span class="s5">4</span><span class="s2">,)),</span>
+<a name="l42"><span class="ln">42   </span></a>    <span class="s0">keras</span><span class="s2">.</span><span class="s0">layers</span><span class="s2">.</span><span class="s0">Dense</span><span class="s2">(</span><span class="s5">12</span><span class="s2">, </span><span class="s0">activation</span><span class="s2">=</span><span class="s3">'relu'</span><span class="s2">),</span>
+<a name="l43"><span class="ln">43   </span></a>    <span class="s0">keras</span><span class="s2">.</span><span class="s0">layers</span><span class="s2">.</span><span class="s0">Dense</span><span class="s2">(</span><span class="s5">3</span><span class="s2">, </span><span class="s0">activation</span><span class="s2">=</span><span class="s3">'softmax'</span><span class="s2">)</span>
+<a name="l44"><span class="ln">44   </span></a><span class="s2">])</span>
+<a name="l45"><span class="ln">45   </span></a><span class="s0">model</span><span class="s2">.</span><span class="s0">compile</span><span class="s2">(</span><span class="s0">optimizer</span><span class="s2">=</span><span class="s3">'adam'</span><span class="s2">,</span>
+<a name="l46"><span class="ln">46   </span></a>              <span class="s0">loss</span><span class="s2">=</span><span class="s3">'categorical_crossentropy'</span><span class="s2">,</span>
+<a name="l47"><span class="ln">47   </span></a>              <span class="s0">metrics</span><span class="s2">=[</span><span class="s3">'accuracy'</span><span class="s2">])</span><hr class="ls0"><a name="l48"><span class="ln">48   </span></a><span class="s0">#%% md 
+<a name="l49"><span class="ln">49   </span></a># Train the model 
+<a name="l50"><span class="ln">50   </span></a>I noticed that i  batch size is raised over 8, models starts to perform poorly <hr class="ls0"><a name="l51"><span class="ln">51   </span></a>#%% 
+<a name="l52"><span class="ln">52   </span></a>model_data </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">fit</span><span class="s2">(</span><span class="s0">X_train</span><span class="s2">, </span><span class="s0">y_train</span><span class="s2">, </span><span class="s0">epochs</span><span class="s2">=</span><span class="s5">90</span><span class="s2">, </span><span class="s0">batch_size</span><span class="s2">=</span><span class="s5">8</span><span class="s2">, </span><span class="s0">validation_split</span><span class="s2">=</span><span class="s5">0.1</span><span class="s2">)</span>
+<a name="l53"><span class="ln">53   </span></a><span class="s0">score </span><span class="s2">= </span><span class="s0">model</span><span class="s2">.</span><span class="s0">evaluate</span><span class="s2">(</span><span class="s0">X_test</span><span class="s2">, </span><span class="s0">y_test</span><span class="s2">, </span><span class="s0">verbose</span><span class="s2">=</span><span class="s5">1</span><span class="s2">)</span>
+<a name="l54"><span class="ln">54   </span></a><hr class="ls0"><a name="l55"><span class="ln">55   </span></a><span class="s0">#%% md 
+<a name="l56"><span class="ln">56   </span></a># Plot the results 
+<a name="l57"><span class="ln">57   </span></a> I noticed that 12 neurons and 90 epocs was an optimal to get over 95 % accuracy. If neurons are raised it won affect to results anymore. If epocs are decreased  model starts to perform poorly. <hr class="ls0"><a name="l58"><span class="ln">58   </span></a>#%% md 
+<a name="l59"><span class="ln">59   </span></a>| Metric                  | Data used                                                             | What it tells you                                                                                           | 
+<a name="l60"><span class="ln">60   </span></a>| ----------------------- | --------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | 
+<a name="l61"><span class="ln">61   </span></a>| **Training accuracy**   | The data the model was **trained on** (`X_train`, `y_train`)          | How well the model learned patterns **from known examples**                                                 | 
+<a name="l62"><span class="ln">62   </span></a>| **Validation accuracy** | A held-out portion of the training data (your `validation_split=0.1`) | How well the model performs on **unseen data during training** (used to tune epochs and detect overfitting) | 
+<a name="l63"><span class="ln">63   </span></a>| **Test accuracy**       | The completely **separate test set** (`X_test`, `y_test`)             | How well the model generalizes to **new, never-before-seen data**                                           | 
+<a name="l64"><span class="ln">64   </span></a> <hr class="ls0"><a name="l65"><span class="ln">65   </span></a>#%% md 
+<a name="l66"><span class="ln">66   </span></a>In well trained model: 
+<a name="l67"><span class="ln">67   </span></a>Training accuracy  ≥  Validation accuracy  ≈  Test accuracy <hr class="ls0"><a name="l68"><span class="ln">68   </span></a>#%% 
+<a name="l69"><span class="ln">69   </span></a></span>
+<a name="l70"><span class="ln">70   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Test loss:&quot;</span><span class="s2">, </span><span class="s0">score</span><span class="s2">[</span><span class="s5">0</span><span class="s2">])</span>
+<a name="l71"><span class="ln">71   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Test accuracy:&quot;</span><span class="s2">, </span><span class="s0">score</span><span class="s2">[</span><span class="s5">1</span><span class="s2">])</span>
+<a name="l72"><span class="ln">72   </span></a>
+<a name="l73"><span class="ln">73   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Final training accuracy:&quot;</span><span class="s2">, </span><span class="s0">model_data</span><span class="s2">.</span><span class="s0">history</span><span class="s2">[</span><span class="s3">'accuracy'</span><span class="s2">][-</span><span class="s5">1</span><span class="s2">])</span>
+<a name="l74"><span class="ln">74   </span></a><span class="s0">print</span><span class="s2">(</span><span class="s3">&quot;Final validation accuracy:&quot;</span><span class="s2">, </span><span class="s0">model_data</span><span class="s2">.</span><span class="s0">history</span><span class="s2">[</span><span class="s3">'val_accuracy'</span><span class="s2">][-</span><span class="s5">1</span><span class="s2">])</span>
+<a name="l75"><span class="ln">75   </span></a>
+<a name="l76"><span class="ln">76   </span></a>
+<a name="l77"><span class="ln">77   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">plot</span><span class="s2">(</span><span class="s0">model_data</span><span class="s2">.</span><span class="s0">history</span><span class="s2">[</span><span class="s3">'accuracy'</span><span class="s2">],</span><span class="s0">label</span><span class="s2">= </span><span class="s3">'Training accuracy'</span><span class="s2">)</span>
+<a name="l78"><span class="ln">78   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">plot</span><span class="s2">(</span><span class="s0">model_data</span><span class="s2">.</span><span class="s0">history</span><span class="s2">[</span><span class="s3">'val_accuracy'</span><span class="s2">],</span><span class="s0">label </span><span class="s2">= </span><span class="s3">'Validation accuracy'</span><span class="s2">)</span>
+<a name="l79"><span class="ln">79   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">xlabel</span><span class="s2">(</span><span class="s3">'Epoch'</span><span class="s2">)</span>
+<a name="l80"><span class="ln">80   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">ylabel</span><span class="s2">(</span><span class="s3">'Accuracy'</span><span class="s2">)</span>
+<a name="l81"><span class="ln">81   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">legend</span><span class="s2">()</span>
+<a name="l82"><span class="ln">82   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">grid</span><span class="s2">(</span><span class="s1">True</span><span class="s2">)</span>
+<a name="l83"><span class="ln">83   </span></a><span class="s0">plt</span><span class="s2">.</span><span class="s0">show</span><span class="s2">()</span>
+<a name="l84"><span class="ln">84   </span></a></pre>
+</body>
+</html>
